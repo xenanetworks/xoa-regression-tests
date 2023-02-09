@@ -3,8 +3,8 @@
     "EntityList": [
       {
         "PortRef": {
-          "ChassisId": "b34ab666-57f3-4479-9786-eba2a1d6efe5",
-          "ModuleIndex": 1,
+          "ChassisId": "d493e502-c384-4f69-832d-bc1aac337903",
+          "ModuleIndex": 7,
           "PortIndex": 0
         },
         "PortGroup": "UNDEFINED",
@@ -42,14 +42,14 @@
         "PortRateCapProfile": "Physical Port Rate",
         "PortRateCapUnit": "Mbps",
         "MultiStreamMap": null,
-        "ItemID": "3c6d7098-d230-4802-af58-73f0ca705a5c",
+        "ItemID": "73e6bb5a-4509-4bd9-9969-893be6266160",
         "ParentID": "",
         "Label": ""
       },
       {
         "PortRef": {
-          "ChassisId": "b34ab666-57f3-4479-9786-eba2a1d6efe5",
-          "ModuleIndex": 1,
+          "ChassisId": "d493e502-c384-4f69-832d-bc1aac337903",
+          "ModuleIndex": 7,
           "PortIndex": 1
         },
         "PortGroup": "UNDEFINED",
@@ -87,7 +87,7 @@
         "PortRateCapProfile": "Physical Port Rate",
         "PortRateCapUnit": "Mbps",
         "MultiStreamMap": null,
-        "ItemID": "bc290aa8-f0e2-42d5-93e3-9829b0cba9b5",
+        "ItemID": "544698e4-ab65-4890-8546-02edc48702c0",
         "ParentID": "",
         "Label": ""
       }
@@ -95,8 +95,8 @@
   },
   "StreamProfileHandler": {
     "ProfileAssignmentMap": {
-      "guid_3c6d7098-d230-4802-af58-73f0ca705a5c": "ac30d8e4-ecc0-4079-8b2f-3edbf4403079",
-      "guid_bc290aa8-f0e2-42d5-93e3-9829b0cba9b5": "ac30d8e4-ecc0-4079-8b2f-3edbf4403079"
+      "guid_544698e4-ab65-4890-8546-02edc48702c0": "6e5f30bf-9cc7-4167-b04b-e3b4636e6183",
+      "guid_73e6bb5a-4509-4bd9-9969-893be6266160": "6e5f30bf-9cc7-4167-b04b-e3b4636e6183"
     },
     "EntityList": [
       {
@@ -120,7 +120,7 @@
             {
               "SegmentType": "ETHERNET",
               "SegmentValue": "AAAAAAAAAAAAAAAA//8=",
-              "ItemID": "b6ceb679-0fe0-45fc-8b97-996ec6e01b25",
+              "ItemID": "1490b4a9-5ae2-4fd7-bffa-1a4d9523dd9f",
               "ParentID": "",
               "Label": ""
             }
@@ -135,7 +135,7 @@
           "ResourceUsed": false,
           "ChildResourceUsed": false
         },
-        "ItemID": "ac30d8e4-ecc0-4079-8b2f-3edbf4403079",
+        "ItemID": "6e5f30bf-9cc7-4167-b04b-e3b4636e6183",
         "ParentID": "",
         "Label": ""
       },
@@ -160,14 +160,14 @@
             {
               "SegmentType": "ETHERNET",
               "SegmentValue": "AAAAAAAAAAAAAAAAgQA=",
-              "ItemID": "4c3c4c85-43ba-4484-b5e7-ad1b22a7fdd5",
+              "ItemID": "a82da13c-5e63-45ae-a5b7-fe61702c89e3",
               "ParentID": "",
               "Label": ""
             },
             {
               "SegmentType": "VLAN",
               "SegmentValue": "AAD//w==",
-              "ItemID": "88c28c54-7bbd-43ac-9638-e3f8ed7e39ee",
+              "ItemID": "af3a78cc-2271-41b0-b7bd-a6291d5194d6",
               "ParentID": "",
               "Label": ""
             }
@@ -182,7 +182,7 @@
           "ResourceUsed": false,
           "ChildResourceUsed": false
         },
-        "ItemID": "fe791943-3a0d-441e-a0cd-67bb0c1896a5",
+        "ItemID": "a63ffe22-b9bf-46ff-91a7-53d4ae8a3ff0",
         "ParentID": "",
         "Label": ""
       },
@@ -207,21 +207,21 @@
             {
               "SegmentType": "ETHERNET",
               "SegmentValue": "AAAAAAAAAAAAAAAAkQA=",
-              "ItemID": "1f2a87dd-ba76-41dd-85e8-6127f29b08d7",
+              "ItemID": "feda569e-183a-4f94-b870-1c01e8c5157d",
               "ParentID": "",
               "Label": ""
             },
             {
               "SegmentType": "VLAN",
               "SegmentValue": "AACBAA==",
-              "ItemID": "fdab63fc-d8b5-417c-a30f-e5e8fddfccf4",
+              "ItemID": "dd1d30a4-ef89-41d2-b8c9-7be1b4f78adf",
               "ParentID": "",
               "Label": ""
             },
             {
               "SegmentType": "VLAN",
               "SegmentValue": "AAD//w==",
-              "ItemID": "624cc120-db45-4ef6-bc1a-6fc459354db7",
+              "ItemID": "fd60c099-cafb-4a2c-b09d-cd3b0c213eb4",
               "ParentID": "",
               "Label": ""
             }
@@ -236,7 +236,7 @@
           "ResourceUsed": false,
           "ChildResourceUsed": false
         },
-        "ItemID": "30c441a8-2ea2-4f25-8f30-0adac04e5f79",
+        "ItemID": "92529ad2-1ea8-4cf3-9f78-48c8ba065f87",
         "ParentID": "",
         "Label": ""
       },
@@ -261,14 +261,14 @@
             {
               "SegmentType": "ETHERNET",
               "SegmentValue": "AAAAAAAAAAAAAAAACAA=",
-              "ItemID": "61444a36-ac08-4b25-9fbc-b64a3d359f14",
+              "ItemID": "724c9a57-e7db-403f-8287-646a37488e1a",
               "ParentID": "",
               "Label": ""
             },
             {
               "SegmentType": "IP",
               "SegmentValue": "RQAAFAAAAAB//wAAAAAAAAAAAAA=",
-              "ItemID": "803573c6-0c42-4e24-80bd-d3b48cefc913",
+              "ItemID": "6d30ad71-6f18-4c54-b1e4-2c74fbdb56c4",
               "ParentID": "",
               "Label": ""
             }
@@ -283,7 +283,7 @@
           "ResourceUsed": false,
           "ChildResourceUsed": false
         },
-        "ItemID": "dfb33612-df2a-479a-a369-5239185c6da4",
+        "ItemID": "cbea98b9-8adc-47b3-a2f6-06021fa9c3f6",
         "ParentID": "",
         "Label": ""
       },
@@ -308,21 +308,21 @@
             {
               "SegmentType": "ETHERNET",
               "SegmentValue": "AAAAAAAAAAAAAAAACAA=",
-              "ItemID": "263107d1-d7dd-4c05-bc06-effe29a8f695",
+              "ItemID": "4457a851-a0d3-4a29-abdc-b43977d61e4c",
               "ParentID": "",
               "Label": ""
             },
             {
               "SegmentType": "IP",
               "SegmentValue": "RQAAFAAAAAB/EQAAAAAAAAAAAAA=",
-              "ItemID": "2781d280-86af-4e04-94ed-88cc6942105f",
+              "ItemID": "100e6337-e87a-435b-823e-f149716f8b7b",
               "ParentID": "",
               "Label": ""
             },
             {
               "SegmentType": "UDP",
               "SegmentValue": "AAAAAAAAAAA=",
-              "ItemID": "1baaa012-ec6e-4406-b21c-94d52f127e81",
+              "ItemID": "31ee0143-a2d9-49bc-ade8-952c81757369",
               "ParentID": "",
               "Label": ""
             }
@@ -337,7 +337,7 @@
           "ResourceUsed": false,
           "ChildResourceUsed": false
         },
-        "ItemID": "fb010a64-28bc-4797-b52b-be28ab3cce0b",
+        "ItemID": "be13b2af-5d03-4b6d-88c1-242ec719cc4b",
         "ParentID": "",
         "Label": ""
       },
@@ -362,14 +362,14 @@
             {
               "SegmentType": "ETHERNET",
               "SegmentValue": "AAAAAAAAAAAAAAAAht0=",
-              "ItemID": "f654ecce-0fee-45e5-8f6c-39e02ed40ee1",
+              "ItemID": "94cbf3bd-2e86-4279-9268-6372fd6b1ca5",
               "ParentID": "",
               "Label": ""
             },
             {
               "SegmentType": "IPv6",
               "SegmentValue": "YAAAAAAAO/8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "ItemID": "03312d7a-0b98-4365-9333-1a649e164e56",
+              "ItemID": "7c2af827-1efa-49b2-905b-325de7062126",
               "ParentID": "",
               "Label": ""
             }
@@ -384,108 +384,7 @@
           "ResourceUsed": false,
           "ChildResourceUsed": false
         },
-        "ItemID": "5ee77c74-d5ef-49c6-9981-9f86bcf8dd30",
-        "ParentID": "",
-        "Label": ""
-      },
-      {
-        "StreamConfig": {
-          "SwModifier": null,
-          "HwModifiers": [],
-          "FieldValueRanges": [],
-          "StreamDescrPrefix": "Stream",
-          "ResourceIndex": -1,
-          "TpldId": -1,
-          "EnableState": "OFF",
-          "RateType": "Fraction",
-          "PacketLimit": 0,
-          "RateFraction": 100.0,
-          "RatePps": 0.0,
-          "RateL2Mbps": 0.0,
-          "UseBurstValues": false,
-          "BurstSize": 0,
-          "BurstDensity": 100,
-          "HeaderSegments": [
-            {
-              "SegmentType": "ETHERNET",
-              "SegmentValue": "AAAAAAAAAAAAAAAA//8=",
-              "ItemID": "854be3b9-4a19-4d83-a405-74dd233260fb",
-              "ParentID": "",
-              "Label": ""
-            },
-            {
-              "SegmentType": "TCP",
-              "SegmentValue": "AbsAAAAAAAAAAAAAUAAAAAAAAAA=",
-              "ItemID": "63852d42-3bd3-47cb-9829-2faba58dd730",
-              "ParentID": "",
-              "Label": ""
-            }
-          ],
-          "PacketLengthType": "FIXED",
-          "PacketMinSize": 64,
-          "PacketMaxSize": 64,
-          "PayloadDefinition": {
-            "PayloadType": "Incrementing",
-            "PayloadPattern": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0"
-          },
-          "ResourceUsed": false,
-          "ChildResourceUsed": false
-        },
-        "ItemID": "d55a3583-049e-48c5-a02a-a92bf01e87cf",
-        "ParentID": "",
-        "Label": ""
-      },
-      {
-        "StreamConfig": {
-          "SwModifier": null,
-          "HwModifiers": [],
-          "FieldValueRanges": [],
-          "StreamDescrPrefix": "Stream",
-          "ResourceIndex": -1,
-          "TpldId": -1,
-          "EnableState": "OFF",
-          "RateType": "Fraction",
-          "PacketLimit": 0,
-          "RateFraction": 100.0,
-          "RatePps": 0.0,
-          "RateL2Mbps": 0.0,
-          "UseBurstValues": false,
-          "BurstSize": 0,
-          "BurstDensity": 100,
-          "HeaderSegments": [
-            {
-              "SegmentType": "ETHERNET",
-              "SegmentValue": "AAAAAAAAAAAAAAAACAA=",
-              "ItemID": "4376bd38-cb8e-40ae-a6f8-5825b293c8fa",
-              "ParentID": "",
-              "Label": ""
-            },
-            {
-              "SegmentType": "IP",
-              "SegmentValue": "RQAAFAAAAAB/BgAAAAAAAAAAAAA=",
-              "ItemID": "d113ed0a-f0d1-4f27-8260-af5338211f5b",
-              "ParentID": "",
-              "Label": ""
-            },
-            {
-              "SegmentType": "TCP",
-              "SegmentValue": "AbsAAAAAAAAAAAAAUAAAAAAAAAA=",
-              "ItemID": "f3b5e90a-55a2-48b9-bafe-09e2f84b509a",
-              "ParentID": "",
-              "Label": ""
-            }
-          ],
-          "PacketLengthType": "FIXED",
-          "PacketMinSize": 64,
-          "PacketMaxSize": 64,
-          "PayloadDefinition": {
-            "PayloadType": "Incrementing",
-            "PayloadPattern": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0"
-          },
-          "ResourceUsed": false,
-          "ChildResourceUsed": false
-        },
-        "ItemID": "8bf14765-9fea-485e-9155-56b6527ae35a",
+        "ItemID": "094f3fe1-a2a7-40b8-aaac-c4a142373d49",
         "ParentID": "",
         "Label": ""
       }
@@ -502,19 +401,19 @@
               "Direction": "BIDIR",
               "PortRoleHandler": {
                 "RoleMap": {
-                  "guid_3c6d7098-d230-4802-af58-73f0ca705a5c": {
+                  "guid_544698e4-ab65-4890-8546-02edc48702c0": {
                     "IsUsed": true,
                     "Role": "UNDEFINED",
                     "PeerPortId": ""
                   },
-                  "guid_bc290aa8-f0e2-42d5-93e3-9829b0cba9b5": {
+                  "guid_73e6bb5a-4509-4bd9-9969-893be6266160": {
                     "IsUsed": true,
                     "Role": "UNDEFINED",
                     "PeerPortId": ""
                   }
                 }
               },
-              "ThroughputTestEnabled": false,
+              "ThroughputTestEnabled": true,
               "RateIterationOptions": {
                 "InitialValue": 100.0,
                 "MinimumValue": 0.1,
@@ -525,19 +424,19 @@
               },
               "ForwardingTestEnabled": true,
               "RateSweepOptions": {
-                "StartValue": 90.0,
+                "StartValue": 50.0,
                 "EndValue": 100.0,
                 "StepValue": 50.0
               },
               "TestType": "RateTest",
-              "Enabled": false,
+              "Enabled": true,
               "DurationType": "Seconds",
               "Duration": 5.0,
               "DurationTimeUnit": "Seconds",
               "DurationFrames": 1,
               "DurationFrameUnit": "Mframes",
               "Iterations": 1,
-              "ItemID": "6f6b33ca-9e08-44a5-9152-c8f176d612a4",
+              "ItemID": "35268cd6-d6b8-4376-a392-9720589be6c1",
               "ParentID": "",
               "Label": "Full Mesh"
             },
@@ -546,12 +445,12 @@
               "Direction": "BIDIR",
               "PortRoleHandler": {
                 "RoleMap": {
-                  "guid_3c6d7098-d230-4802-af58-73f0ca705a5c": {
+                  "guid_544698e4-ab65-4890-8546-02edc48702c0": {
                     "IsUsed": true,
                     "Role": "UNDEFINED",
                     "PeerPortId": ""
                   },
-                  "guid_bc290aa8-f0e2-42d5-93e3-9829b0cba9b5": {
+                  "guid_73e6bb5a-4509-4bd9-9969-893be6266160": {
                     "IsUsed": true,
                     "Role": "UNDEFINED",
                     "PeerPortId": ""
@@ -581,7 +480,7 @@
               "DurationFrames": 1,
               "DurationFrameUnit": "Mframes",
               "Iterations": 1,
-              "ItemID": "d6b62812-66ce-4db5-b910-1799a9fb2c5b",
+              "ItemID": "7942ef73-65d4-4c82-aaf2-a70018bc6a5a",
               "ParentID": "",
               "Label": "Part.Mesh, 1:N"
             },
@@ -590,12 +489,12 @@
               "Direction": "EAST_WEST",
               "PortRoleHandler": {
                 "RoleMap": {
-                  "guid_3c6d7098-d230-4802-af58-73f0ca705a5c": {
+                  "guid_544698e4-ab65-4890-8546-02edc48702c0": {
                     "IsUsed": true,
                     "Role": "UNDEFINED",
                     "PeerPortId": ""
                   },
-                  "guid_bc290aa8-f0e2-42d5-93e3-9829b0cba9b5": {
+                  "guid_73e6bb5a-4509-4bd9-9969-893be6266160": {
                     "IsUsed": true,
                     "Role": "UNDEFINED",
                     "PeerPortId": ""
@@ -625,7 +524,7 @@
               "DurationFrames": 1,
               "DurationFrameUnit": "Mframes",
               "Iterations": 1,
-              "ItemID": "b436b107-b5f2-40e9-a55f-d3445c5f4498",
+              "ItemID": "3889f58d-9e3d-4078-aabf-94d960c3a264",
               "ParentID": "",
               "Label": "Part.Mesh, N->N"
             }
@@ -639,7 +538,7 @@
         "DurationFrames": 1,
         "DurationFrameUnit": "Mframes",
         "Iterations": 1,
-        "ItemID": "730e2c88-8cb3-48d5-a3f4-27433d992420",
+        "ItemID": "18761ffb-ac01-4084-95d7-29ee80554ae8",
         "ParentID": "",
         "Label": ""
       },
@@ -647,12 +546,12 @@
         "$type": "XenaCommon.TestConfig.Rfc2889.TestTypeOptions.CongestionControlTestOptions, Valkyrie2889",
         "PortRoleHandler": {
           "RoleMap": {
-            "guid_3c6d7098-d230-4802-af58-73f0ca705a5c": {
+            "guid_544698e4-ab65-4890-8546-02edc48702c0": {
               "IsUsed": true,
               "Role": "Source",
               "PeerPortId": ""
             },
-            "guid_bc290aa8-f0e2-42d5-93e3-9829b0cba9b5": {
+            "guid_73e6bb5a-4509-4bd9-9969-893be6266160": {
               "IsUsed": true,
               "Role": "Source",
               "PeerPortId": ""
@@ -667,7 +566,7 @@
         "DurationFrames": 1,
         "DurationFrameUnit": "Mframes",
         "Iterations": 1,
-        "ItemID": "e0d82eb6-7627-4ee8-9c88-1428e4dc00e8",
+        "ItemID": "d73d569d-0a5f-48e7-8262-2e4a403b2e1e",
         "ParentID": "",
         "Label": ""
       },
@@ -677,27 +576,27 @@
         "AcceptableRxMaxUtilDelta": 0.001,
         "PortRoleHandler": {
           "RoleMap": {
-            "guid_bc290aa8-f0e2-42d5-93e3-9829b0cba9b5": {
-              "IsUsed": true,
-              "Role": "Destination",
-              "PeerPortId": ""
-            },
-            "guid_3c6d7098-d230-4802-af58-73f0ca705a5c": {
+            "guid_544698e4-ab65-4890-8546-02edc48702c0": {
               "IsUsed": true,
               "Role": "Source",
+              "PeerPortId": ""
+            },
+            "guid_73e6bb5a-4509-4bd9-9969-893be6266160": {
+              "IsUsed": true,
+              "Role": "Destination",
               "PeerPortId": ""
             }
           }
         },
         "TestType": "ForwardPressure",
-        "Enabled": true,
+        "Enabled": false,
         "DurationType": "Seconds",
-        "Duration": 5.0,
+        "Duration": 30.0,
         "DurationTimeUnit": "Seconds",
         "DurationFrames": 1,
         "DurationFrameUnit": "Mframes",
         "Iterations": 1,
-        "ItemID": "d8a4f036-3650-4122-9e65-be0b9ad63413",
+        "ItemID": "12f966f5-530d-440c-985e-1452a0cf823c",
         "ParentID": "",
         "Label": ""
       },
@@ -706,14 +605,14 @@
         "UseThroughputAsStartValue": true,
         "PortRoleHandler": {
           "RoleMap": {
-            "guid_bc290aa8-f0e2-42d5-93e3-9829b0cba9b5": {
-              "IsUsed": true,
-              "Role": "Destination",
-              "PeerPortId": ""
-            },
-            "guid_3c6d7098-d230-4802-af58-73f0ca705a5c": {
+            "guid_544698e4-ab65-4890-8546-02edc48702c0": {
               "IsUsed": true,
               "Role": "Source",
+              "PeerPortId": ""
+            },
+            "guid_73e6bb5a-4509-4bd9-9969-893be6266160": {
+              "IsUsed": true,
+              "Role": "Destination",
               "PeerPortId": ""
             }
           }
@@ -743,7 +642,7 @@
         "DurationFrames": 1,
         "DurationFrameUnit": "Mframes",
         "Iterations": 1,
-        "ItemID": "08d72c9c-86ac-40e9-b16d-7f08da6f6f35",
+        "ItemID": "aa857f3f-03f1-4a6f-bf2a-84680aa35990",
         "ParentID": "",
         "Label": ""
       },
@@ -774,12 +673,12 @@
         "DutAgingTime": 300,
         "PortRoleHandler": {
           "RoleMap": {
-            "guid_3c6d7098-d230-4802-af58-73f0ca705a5c": {
+            "guid_544698e4-ab65-4890-8546-02edc48702c0": {
               "IsUsed": true,
               "Role": "TestPort",
               "PeerPortId": ""
             },
-            "guid_bc290aa8-f0e2-42d5-93e3-9829b0cba9b5": {
+            "guid_73e6bb5a-4509-4bd9-9969-893be6266160": {
               "IsUsed": true,
               "Role": "LearningPort",
               "PeerPortId": ""
@@ -795,7 +694,7 @@
         "DurationFrames": 1,
         "DurationFrameUnit": "Mframes",
         "Iterations": 1,
-        "ItemID": "6d33a983-efed-49b5-9e3a-ad9561d4fefd",
+        "ItemID": "a74eb618-81fa-4323-b32c-254bcc45f7c9",
         "ParentID": "",
         "Label": ""
       },
@@ -828,12 +727,12 @@
         "DutAgingTime": 300,
         "PortRoleHandler": {
           "RoleMap": {
-            "guid_3c6d7098-d230-4802-af58-73f0ca705a5c": {
+            "guid_544698e4-ab65-4890-8546-02edc48702c0": {
               "IsUsed": true,
               "Role": "TestPort",
               "PeerPortId": ""
             },
-            "guid_bc290aa8-f0e2-42d5-93e3-9829b0cba9b5": {
+            "guid_73e6bb5a-4509-4bd9-9969-893be6266160": {
               "IsUsed": true,
               "Role": "LearningPort",
               "PeerPortId": ""
@@ -849,7 +748,7 @@
         "DurationFrames": 1,
         "DurationFrameUnit": "Mframes",
         "Iterations": 1,
-        "ItemID": "ab717719-22cc-4e9d-a659-9e90e8d9464f",
+        "ItemID": "f61c870e-e1bd-4ebd-86cc-3eebd3cf0b17",
         "ParentID": "",
         "Label": ""
       },
@@ -867,14 +766,14 @@
         },
         "PortRoleHandler": {
           "RoleMap": {
-            "guid_bc290aa8-f0e2-42d5-93e3-9829b0cba9b5": {
-              "IsUsed": true,
-              "Role": "Destination",
-              "PeerPortId": ""
-            },
-            "guid_3c6d7098-d230-4802-af58-73f0ca705a5c": {
+            "guid_544698e4-ab65-4890-8546-02edc48702c0": {
               "IsUsed": true,
               "Role": "Source",
+              "PeerPortId": ""
+            },
+            "guid_73e6bb5a-4509-4bd9-9969-893be6266160": {
+              "IsUsed": true,
+              "Role": "Destination",
               "PeerPortId": ""
             }
           }
@@ -887,7 +786,7 @@
         "DurationFrames": 1,
         "DurationFrameUnit": "Mframes",
         "Iterations": 1,
-        "ItemID": "cbba3b26-f7db-46ae-85d0-4ca06f0a0807",
+        "ItemID": "84c07b54-9cb2-4fdd-bae3-2379895ddc69",
         "ParentID": "",
         "Label": ""
       },
@@ -903,12 +802,12 @@
         },
         "PortRoleHandler": {
           "RoleMap": {
-            "guid_3c6d7098-d230-4802-af58-73f0ca705a5c": {
+            "guid_544698e4-ab65-4890-8546-02edc48702c0": {
               "IsUsed": true,
               "Role": "Source",
               "PeerPortId": ""
             },
-            "guid_bc290aa8-f0e2-42d5-93e3-9829b0cba9b5": {
+            "guid_73e6bb5a-4509-4bd9-9969-893be6266160": {
               "IsUsed": true,
               "Role": "Destination",
               "PeerPortId": ""
@@ -923,7 +822,7 @@
         "DurationFrames": 1,
         "DurationFrameUnit": "Mframes",
         "Iterations": 1,
-        "ItemID": "38271fb0-8b7b-40cf-8e11-46082c516fb8",
+        "ItemID": "181df211-5bc5-4fb8-ada6-e29395ecdbbc",
         "ParentID": "",
         "Label": ""
       }
@@ -968,7 +867,7 @@
       "RateBpsL1Unit": "Mbps",
       "RateBpsL2": 0.0,
       "RateBpsL2Unit": "Mbps",
-      "ItemID": "a1c6f5a6-ee22-40e2-901a-36269a1c3299",
+      "ItemID": "a964514d-d76a-4223-9ba4-d5fa4a87083e",
       "ParentID": "",
       "Label": ""
     },
@@ -992,12 +891,12 @@
     "UsePortSyncStart": false,
     "PortStaggerSteps": 0
   },
-  "CreationDate": "2022-11-28 12:54:17Z",
+  "CreationDate": "2023-02-09 17:56:05Z",
   "ChassisManager": {
     "ChassisList": [
       {
-        "ChassisID": "b34ab666-57f3-4479-9786-eba2a1d6efe5",
-        "HostName": "192.168.1.197",
+        "ChassisID": "d493e502-c384-4f69-832d-bc1aac337903",
+        "HostName": "demo.xenanetworks.com",
         "PortNumber": 22606,
         "Password": "xena",
         "ConnectionType": "Native",
@@ -1030,7 +929,7 @@
     "ReportFilename": "valkyrie2889-Report",
     "AppendTimestamp": true
   },
-  "TidAllocationScope": "SrcPortId",
+  "TidAllocationScope": "ConfigScope",
   "FormatVersion": 1,
   "ApplicationVersion": "1.43.8199.27518"
 }

@@ -25,14 +25,18 @@ TS_WILL_BE_TEST = (
 
 
 TESTERS = (
+    # types.Credentials(
+    #     product=types.EProductType.VALKYRIE,
+    #     host="192.168.1.198"
+    # ),
+    # types.Credentials(
+    #     product=types.EProductType.VALKYRIE,
+    #     host="192.168.1.197"
+    # )
     types.Credentials(
         product=types.EProductType.VALKYRIE,
-        host="192.168.1.198"
+        host="demo.xenanetworks.com"
     ),
-    types.Credentials(
-        product=types.EProductType.VALKYRIE,
-        host="192.168.1.197"
-    )
 )
 
 
@@ -62,6 +66,16 @@ def plugin_folder(tmp_path_factory):
     copy_ts_content(path_ts_git, path_plugins)
     return path_plugins
 
+@pytest.mark.asyncio
+async def test_core():
+    xoa_controller = await controller.MainController()
+    assert xoa_controller
+
+@pytest.mark.asyncio
+async def test_add_tester():
+    xoa_controller = await controller.MainController()
+    for tester in TESTERS:
+        await xoa_controller.add_tester(tester)
 
 @pytest.mark.asyncio
 async def test_plugins(plugin_folder):
