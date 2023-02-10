@@ -1,0 +1,3 @@
+git+https://github.com/xenanetworks/open-automation-core.git@main
+git+https://github.com/xenanetworks/open-automation-python-api.git@main
+git+https://github.com/xenanetworks/open-automation-config-converter.git@main

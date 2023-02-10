@@ -1,13 +1,16 @@
+import os
 import json
 import shutil
 import pytest
 import git
-from dataclasses import dataclass
+from typing import Tuple
 from pathlib import Path
 from xoa_core import (
     controller,
     types,
 )
+from async_timeout import timeout
+
 from xoa_converter.entry import converter
 from xoa_converter.types import TestSuiteType
 
@@ -24,39 +27,61 @@ TS_WILL_BE_TEST = (
 )
 
 
-TESTERS = (
-    # types.Credentials(
-    #     product=types.EProductType.VALKYRIE,
-    #     host="192.168.1.198"
-    # ),
-    # types.Credentials(
-    #     product=types.EProductType.VALKYRIE,
-    #     host="192.168.1.197"
-    # )
+TESTER_CHINA = (
+    types.Credentials(
+        product=types.EProductType.VALKYRIE,
+        host="192.168.1.198"
+    ),
+    types.Credentials(
+        product=types.EProductType.VALKYRIE,
+        host="192.168.1.197"
+    ),
+)
+TESTER_DEMO = (
     types.Credentials(
         product=types.EProductType.VALKYRIE,
         host="demo.xenanetworks.com"
     ),
 )
 
+def get_testers() -> Tuple[types.Credentials, ...]:
+    tester = os.getenv('TESTERS')
+    if tester == 'china':
+        return TESTER_CHINA
+    elif tester == 'demo':
+        return TESTER_DEMO
+    else:
+        raise ValueError("Unknown tester")
 
-@dataclass
-class TestSuiteInfo:
-    suite_type: TestSuiteType
-    valkyrie_config_path: str
+def get_valkyire_config(_type: TestSuiteType) -> str:
+    tester = os.getenv('TESTERS')
+    assert tester in ('china', 'demo')
+    file_extension = {
+        TestSuiteType.RFC2544: 'v2544',
+        TestSuiteType.RFC2889: 'v2889',
+    }[_type]
+    return f"{tester}.{file_extension}"
 
 
-VALKYRIE_CONFIG_FILE_2889 = 'test.v2889'
-VALKYRIE_CONFIG_FILE_2544 = 'test.v2544'
-suite_for_testing = (
-    TestSuiteInfo(suite_type=TestSuiteType.RFC2544, valkyrie_config_path=VALKYRIE_CONFIG_FILE_2544),
-    TestSuiteInfo(suite_type=TestSuiteType.RFC2889, valkyrie_config_path=VALKYRIE_CONFIG_FILE_2889),
+TS_FOR_TESTING = (
+    TestSuiteType.RFC2544,
+    TestSuiteType.RFC2889,
 )
 
 def copy_ts_content(path_ts_git: Path, path_plugins: Path):
     for ts in TS_WILL_BE_TEST:
         shutil.move(str(path_ts_git / ts), str(path_plugins))
 
+def with_timeout(t):
+    def wrapper(corofunc):
+        async def run(*args, **kwargs):
+            try:
+                with timeout(t):
+                    return await corofunc(*args, **kwargs)
+            except Exception as e:
+                pytest.fail(str(e))
+        return run
+    return wrapper
 
 @pytest.fixture(scope="session")
 def plugin_folder(tmp_path_factory):
@@ -66,30 +91,36 @@ def plugin_folder(tmp_path_factory):
     copy_ts_content(path_ts_git, path_plugins)
     return path_plugins
 
-@pytest.mark.asyncio
-async def test_core():
-    xoa_controller = await controller.MainController()
-    assert xoa_controller
+@pytest.fixture(autouse=True)
+def run_around_tests():
+    if os.path.isfile('store'):
+        os.remove('store')
 
+@pytest.mark.order(1)
 @pytest.mark.asyncio
+# driver v1 incompatible with older version xena server
+# dont know how to catch nested coroutine exception so adding timeout here
+# https://github.com/pytest-dev/pytest-asyncio/issues/32
+@with_timeout(10)
 async def test_add_tester():
     xoa_controller = await controller.MainController()
-    for tester in TESTERS:
+    for tester in get_testers():
         await xoa_controller.add_tester(tester)
+
 
 @pytest.mark.asyncio
 async def test_plugins(plugin_folder):
     xoa_controller = await controller.MainController()
     xoa_controller.register_lib( str(plugin_folder) )
-    for tester in TESTERS:
+    for tester in get_testers():
         await xoa_controller.add_tester(tester)
 
-    for test_suite in suite_for_testing:
-        info = xoa_controller.get_test_suite_info(test_suite.suite_type.value)
+    for test_suite in TS_FOR_TESTING:
+        info = xoa_controller.get_test_suite_info(test_suite.value)
         assert info
-        with open(test_suite.valkyrie_config_path, "r") as f:
-            new_data = converter(test_suite.suite_type, f.read())
+        with open(get_valkyire_config(test_suite), "r") as f:
+            new_data = converter(test_suite, f.read())
             new_config = json.loads(new_data)
-            execution_id = xoa_controller.start_test_suite(test_suite.suite_type.value, new_config)
+            execution_id = xoa_controller.start_test_suite(test_suite.value, new_config)
             async for msg in xoa_controller.listen_changes(execution_id, _filter={types.EMsgType.STATISTICS}):
                 assert msg
