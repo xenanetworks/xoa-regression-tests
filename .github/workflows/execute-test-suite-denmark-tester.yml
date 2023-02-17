@@ -1,0 +1,37 @@
+name: Check if test suite workable
+
+on:
+  workflow_call:
+
+jobs:
+  Execute-test-suite-on-denmark-tester:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Pull xoa-regression-tests
+      uses: actions/checkout@v3
+      with:
+        ssh-key: ${{ secrets.AUTOTEST }}
+        repository: xenanetworks/xoa-regression-tests
+        path: ./xoa-regression-tests
+        submodules: recursive
+
+    - name: Setup python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.8'
+
+    - name: Install tox and any other packages
+      run: pip install tox
+
+    - name: Replace deps as current repo and branch
+      working-directory: ./xoa-regression-tests
+      run: python actions_override_deps.py --repo ${{ github.event.repository.name }} --branch ${{ github.head_ref || github.ref_name }}
+
+    - name: Run tox
+      working-directory: ./xoa-regression-tests
+      run: tox -e git-demo-tester -r
+
+concurrency:
+  group: ${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
