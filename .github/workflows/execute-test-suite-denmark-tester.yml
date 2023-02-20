@@ -31,7 +31,3 @@ jobs:
     - name: Run tox
       working-directory: ./xoa-regression-tests
       run: tox -e git-demo-tester -r
-
-concurrency:
-  group: ${{ github.head_ref || github.ref_name }}
-  cancel-in-progress: true
