@@ -6,6 +6,7 @@ on:
 jobs:
   Execute-test-suite-on-denmark-tester:
     runs-on: ubuntu-latest
+    timeout-minutes: 3
 
     steps:
     - name: Pull xoa-regression-tests
