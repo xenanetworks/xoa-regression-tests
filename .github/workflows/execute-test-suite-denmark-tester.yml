@@ -4,33 +4,47 @@ on:
   workflow_call:
 
 jobs:
-  Execute-test-suite-on-denmark-tester:
+  pre_job:
+    name: "Check if need skip"
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@v5.3.0
+        with:
+          skip_after_successful_duplicate: 'true'
+
+  execute_test_suite:
+    name: "Execute test suite on denmark tester"
+    needs: pre_job
+    if: needs.pre_job.outputs.should_skip != 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
 
     steps:
-    - name: Pull xoa-regression-tests
-      uses: actions/checkout@v3
-      with:
-        ssh-key: ${{ secrets.AUTOTEST }}
-        repository: xenanetworks/xoa-regression-tests
-        path: ./xoa-regression-tests
-        submodules: recursive
+      - name: Pull xoa-regression-tests
+        uses: actions/checkout@v3
+        with:
+          ssh-key: ${{ secrets.AUTOTEST }}
+          repository: xenanetworks/xoa-regression-tests
+          path: ./xoa-regression-tests
+          submodules: recursive
 
-    - name: Setup python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.8'
+      - name: Setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
 
-    - name: Install tox and any other packages
-      run: pip install tox
+      - name: Install tox and any other packages
+        run: pip install tox
 
-    - name: Replace deps as current repo and branch
-      working-directory: ./xoa-regression-tests
-      run: |
-        python actions_override_deps.py --repo ${{ github.event.repository.name }} --branch ${{ github.head_ref || github.ref_name }}
-        cat git-requires.txt
+      - name: Replace deps as current repo and branch
+        working-directory: ./xoa-regression-tests
+        run: |
+          python actions_override_deps.py --repo ${{ github.event.repository.name }} --branch ${{ github.head_ref || github.ref_name }}
+          cat git-requires.txt
 
-    - name: Run tox
-      working-directory: ./xoa-regression-tests
-      run: tox -e git-demo-tester -r
+      - name: Run tox
+        working-directory: ./xoa-regression-tests
+        run: tox -e git-demo-tester -r
