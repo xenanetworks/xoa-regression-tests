@@ -14,7 +14,6 @@ jobs:
         uses: fkirc/skip-duplicate-actions@v5.3.0
         with:
           skip_after_successful_duplicate: 'true'
-          cancel_others: 'true'
 
   execute_test_suite:
     name: "Execute test suite on denmark tester"
