@@ -1,11 +1,10 @@
 name: Check if test suite workable
-
 on:
   workflow_call:
 
 jobs:
   pre_job:
-    name: "Check if need skip"
+    name: "Check if already executed"
     runs-on: ubuntu-latest
     outputs:
       should_skip: ${{ steps.skip_check.outputs.should_skip }}
@@ -48,3 +47,8 @@ jobs:
       - name: Run tox
         working-directory: ./xoa-regression-tests
         run: tox -e git-demo-tester -r
+
+concurrency:
+  # group: ${{ github.head_ref || github.ref_name }}
+  group: ${{ github.workflow }} # github do not have queue https://github.com/community/community/discussions/12835
+  cancel-in-progress: true
