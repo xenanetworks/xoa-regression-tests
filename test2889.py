@@ -21,6 +21,9 @@ from xoa_converter.converters.rfc2889.model import (
     LegacyStreamRateType,
     BRRModeStr,
     LatencyMode,
+    TestPortMacMode,
+    LearningSequencePortDMacMode,
+    LearningPortDMacMode
 )
 
 
@@ -57,6 +60,15 @@ GeneratorValkyrie2889 = Generator[ValkyrieConfig2889, None, None]
 class ValkyrieConfigMaker2889(ValkyrieConfigMakerBase[ValkyrieConfig2889]):
     def __init__(self) -> None:
         super().__init__(ValkyrieConfig2889)
+        self.test_types = (
+            "rate_test",
+            "congestion_control",
+            "forward_pressure",
+            "max_forwarding_rate",
+            "address_caching_capacity",
+            "address_learning_rate",
+            "broadcast_forwarding",
+        )
 
     def e_LegacyFecMode(self, valkyrie_model: ValkyrieConfig2889) -> GeneratorValkyrie2889:
         for value in self.iterate_enum_values(LegacyFecMode):
@@ -124,6 +136,16 @@ class ValkyrieConfigMaker2889(ValkyrieConfigMakerBase[ValkyrieConfig2889]):
                 port.mdi_mdix_mode = value
             yield valkyrie_model
 
+    def e_TestPortMacMode(self, valkyrie_model: ValkyrieConfig2889) -> GeneratorValkyrie2889:
+        for value in self.iterate_enum_values(TestPortMacMode):
+            valkyrie_model.test_options.test_type_option_map.address_caching_capacity.test_port_mac_mode = value
+            yield valkyrie_model
+
+    def e_LearningPortDMacMode(self, valkyrie_model: ValkyrieConfig2889) -> GeneratorValkyrie2889:
+        for value in self.iterate_enum_values(LearningPortDMacMode):
+            valkyrie_model.test_options.test_type_option_map.address_caching_capacity.learning_port_dmac_mode = value
+            yield valkyrie_model
+
     def iter_change_enums(self, config: ValkyrieConfig2889) -> GeneratorValkyrie2889:
         for iteration_func in (
             self.e_LegacyFecMode,
@@ -139,16 +161,36 @@ class ValkyrieConfigMaker2889(ValkyrieConfigMakerBase[ValkyrieConfig2889]):
             for enum_changed_config in iteration_func(config):
                 yield enum_changed_config
 
+    def toggle_all_test_type(self, config: ValkyrieConfig2889, status: bool) -> None:
+        for each_type in self.test_types:
+            setattr(config.test_options.test_type_option_map, each_type, status)
+
+    def test_each_test_type_separately(self, config: ValkyrieConfig2889) -> GeneratorValkyrie2889:
+        self.toggle_all_test_type(config, False)
+
+        for each_type in self.test_types:
+            setattr(config.test_options.test_type_option_map, each_type, True)
+            yield config
+            setattr(config.test_options.test_type_option_map, each_type, False)
+
+    def test_address_learning(self, config: ValkyrieConfig2889) -> GeneratorValkyrie2889:
+        self.toggle_all_test_type(config, False)
+        config.test_options.test_type_option_map.address_caching_capacity.enabled = True
+        config.test_options.test_type_option_map.address_learning_rate.enabled = True
+        yield from self.e_TestPortMacMode(config)
+        yield from self.e_LearningPortDMacMode(config)
+
     def generate_testing_config(self) -> GeneratorValkyrie2889:
         for base_config in self.get_available_base_config_models():
-            yield base_config # test all config without change anything
+            yield base_config # test each config without change anything
+            yield from self.test_each_test_type_separately(base_config.copy(deep=True))
 
-            print(123)
             # just test throughout with different enum value
-            base_config.test_options.test_type_option_map.rate_test.enabled = False
-            # base_config.test_options.test_type_option_map.forward_pressure.enabled = False
-            for enum_changed_config in self.iter_change_enums(base_config):
-                yield enum_changed_config
+            self.toggle_all_test_type(base_config, False)
+            base_config.test_options.test_type_option_map.rate_test.enabled = True
+            yield from self.iter_change_enums(base_config.copy(deep=True))
+
+            yield from self.test_address_learning(base_config.copy(deep=True))
 
 
 
