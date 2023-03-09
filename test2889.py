@@ -139,14 +139,25 @@ class ValkyrieConfigMaker2889(ValkyrieConfigMakerBase[ValkyrieConfig2889]):
     def e_TestPortMacMode(self, valkyrie_model: ValkyrieConfig2889) -> GeneratorValkyrie2889:
         for value in self.iterate_enum_values(TestPortMacMode):
             valkyrie_model.test_options.test_type_option_map.address_caching_capacity.test_port_mac_mode = value
+            valkyrie_model.test_options.test_type_option_map.address_learning_rate.test_port_mac_mode = value
             yield valkyrie_model
 
     def e_LearningPortDMacMode(self, valkyrie_model: ValkyrieConfig2889) -> GeneratorValkyrie2889:
         for value in self.iterate_enum_values(LearningPortDMacMode):
             valkyrie_model.test_options.test_type_option_map.address_caching_capacity.learning_port_dmac_mode = value
+            valkyrie_model.test_options.test_type_option_map.address_learning_rate.learning_port_dmac_mode = value
+            yield valkyrie_model
+
+    def e_LearningSequencePortDMacMode(self, valkyrie_model: ValkyrieConfig2889) -> GeneratorValkyrie2889:
+        for value in self.iterate_enum_values(LearningSequencePortDMacMode):
+            valkyrie_model.test_options.test_type_option_map.address_caching_capacity.learning_sequence_port_dmac_mode = value
+            valkyrie_model.test_options.test_type_option_map.address_learning_rate.learning_sequence_port_dmac_mode = value
             yield valkyrie_model
 
     def iter_change_enums(self, config: ValkyrieConfig2889) -> GeneratorValkyrie2889:
+        # just test throughout with different enum value
+        self.toggle_all_test_type(config, False)
+        config.test_options.test_type_option_map.rate_test.enabled = True
         for iteration_func in (
             self.e_LegacyFecMode,
             self.e_LegacyPortRateCapUnit,
@@ -163,15 +174,17 @@ class ValkyrieConfigMaker2889(ValkyrieConfigMakerBase[ValkyrieConfig2889]):
 
     def toggle_all_test_type(self, config: ValkyrieConfig2889, status: bool) -> None:
         for each_type in self.test_types:
-            setattr(config.test_options.test_type_option_map, each_type, status)
+            each_config = getattr(config.test_options.test_type_option_map, each_type)
+            each_config.enabled = status
 
     def test_each_test_type_separately(self, config: ValkyrieConfig2889) -> GeneratorValkyrie2889:
         self.toggle_all_test_type(config, False)
 
         for each_type in self.test_types:
-            setattr(config.test_options.test_type_option_map, each_type, True)
+            each_config = getattr(config.test_options.test_type_option_map, each_type)
+            each_config.enabled = True
             yield config
-            setattr(config.test_options.test_type_option_map, each_type, False)
+            each_config.enabled = False
 
     def test_address_learning(self, config: ValkyrieConfig2889) -> GeneratorValkyrie2889:
         self.toggle_all_test_type(config, False)
@@ -179,17 +192,58 @@ class ValkyrieConfigMaker2889(ValkyrieConfigMakerBase[ValkyrieConfig2889]):
         config.test_options.test_type_option_map.address_learning_rate.enabled = True
         yield from self.e_TestPortMacMode(config)
         yield from self.e_LearningPortDMacMode(config)
+        yield from self.e_LearningSequencePortDMacMode(config)
+
+        config.test_options.test_type_option_map.address_caching_capacity.toggle_sync_state ^= True
+        config.test_options.test_type_option_map.address_learning_rate.toggle_sync_state ^= True
+        yield config
+        config.test_options.test_type_option_map.address_caching_capacity.toggle_sync_state ^= True
+        config.test_options.test_type_option_map.address_learning_rate.toggle_sync_state ^= True
+
+        config.test_options.test_type_option_map.address_learning_rate.switch_test_port_roles ^= True
+        config.test_options.test_type_option_map.address_caching_capacity.switch_test_port_roles ^= True
+        yield config
+        config.test_options.test_type_option_map.address_learning_rate.switch_test_port_roles ^= True
+        config.test_options.test_type_option_map.address_caching_capacity.switch_test_port_roles ^= True
+
+        config.test_options.test_type_option_map.address_learning_rate.only_use_capacity ^= True
+        yield config
+        config.test_options.test_type_option_map.address_learning_rate.only_use_capacity ^= True
+
+        config.test_options.test_type_option_map.address_learning_rate.set_end_address_to_capacity ^= True
+        yield config
+        config.test_options.test_type_option_map.address_learning_rate.set_end_address_to_capacity ^= True
+
+    def toggle_boolean_field(self, config: ValkyrieConfig2889) -> GeneratorValkyrie2889:
+        config.test_options.toggle_sync_state ^= True
+        yield config
+        config.test_options.toggle_sync_state ^= True
+
+        config.test_options.use_port_sync_start ^= True
+        yield config
+        config.test_options.use_port_sync_start ^= True
+
+        config.test_options.flow_creation_options.use_micro_tpld_on_demand ^= True
+        yield config
+        config.test_options.flow_creation_options.use_micro_tpld_on_demand ^= True
+
+        self.toggle_all_test_type(config, False)
+        config.test_options.test_type_option_map.max_forwarding_rate.enabled = True
+        config.test_options.test_type_option_map.max_forwarding_rate.use_throughput_as_start_value ^= True
+        yield config
+        config.test_options.test_type_option_map.max_forwarding_rate.enabled = False
+
+        config.test_options.test_type_option_map.errored_frames_filtering.enabled = True
+        config.test_options.test_type_option_map.errored_frames_filtering.oversize_test_enabled ^= False
+        yield config
+
 
     def generate_testing_config(self) -> GeneratorValkyrie2889:
         for base_config in self.get_available_base_config_models():
             yield base_config # test each config without change anything
+            yield from self.toggle_boolean_field(base_config.copy(deep=True))
             yield from self.test_each_test_type_separately(base_config.copy(deep=True))
-
-            # just test throughout with different enum value
-            self.toggle_all_test_type(base_config, False)
-            base_config.test_options.test_type_option_map.rate_test.enabled = True
             yield from self.iter_change_enums(base_config.copy(deep=True))
-
             yield from self.test_address_learning(base_config.copy(deep=True))
 
 
