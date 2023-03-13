@@ -1,16 +1,19 @@
 from __future__ import annotations
 from enum import Enum
 import asyncio
+import hashlib
 import json
+import time
 from typing import Generator
+import uuid
 from xoa_core import (
     controller,
     types,
 )
 from pathlib import Path
-from xoa_converter.entry import converter
-from xoa_converter.types import TestSuiteType
 from xoa_converter.converters.rfc2889.model import ValkyrieConfiguration2889 as ValkyrieConfig2889
+from xoa_converter.converters.rfc2889.adapter import Converter2889Testing
+from xoa_converter.entry import ComplexEncoder
 from valkyrie_config_maker import ValkyrieConfigMakerBase
 from xoa_converter.converters.rfc2889.model import (
     LegacyFecMode,
@@ -23,12 +26,13 @@ from xoa_converter.converters.rfc2889.model import (
     LatencyMode,
     TestPortMacMode,
     LearningSequencePortDMacMode,
-    LearningPortDMacMode
+    LearningPortDMacMode,
+    LegacyPacketSizeType,
 )
 
 
 class PortSpeedStr(Enum):
-    AUTO = "auto"
+    AUTO = "AUTO"
     F100M = "f100m"
     F1G = "f1g"
     F2500M = "f2500m"
@@ -53,7 +57,7 @@ class PortSpeedStr(Enum):
 
 BASE_PATH = Path(__file__).parent
 TEST_ERROR_PATH = Path().resolve() / 'test_error'
-
+SAVED_CONFIG_PATH = Path().resolve() / 'saved_config'
 
 GeneratorValkyrie2889 = Generator[ValkyrieConfig2889, None, None]
 
@@ -154,11 +158,17 @@ class ValkyrieConfigMaker2889(ValkyrieConfigMakerBase[ValkyrieConfig2889]):
             valkyrie_model.test_options.test_type_option_map.address_learning_rate.learning_sequence_port_dmac_mode = value
             yield valkyrie_model
 
+    def e_LegacyPacketSizeType(self, valkyrie_model: ValkyrieConfig2889) -> GeneratorValkyrie2889:
+        for value in self.iterate_enum_values(LegacyPacketSizeType):
+            valkyrie_model.test_options.packet_sizes.packet_size_type = value
+            yield valkyrie_model
+
     def iter_change_enums(self, config: ValkyrieConfig2889) -> GeneratorValkyrie2889:
         # just test throughout with different enum value
         self.toggle_all_test_type(config, False)
         config.test_options.test_type_option_map.rate_test.enabled = True
         for iteration_func in (
+            self.e_LegacyPacketSizeType,
             self.e_LegacyFecMode,
             self.e_LegacyPortRateCapUnit,
             self.e_PortSpeed,
@@ -169,8 +179,10 @@ class ValkyrieConfigMaker2889(ValkyrieConfigMakerBase[ValkyrieConfig2889]):
             self.e_LatencyMode,
             self.e_MdiMdixMode,
         ):
+            print(iteration_func)
             for enum_changed_config in iteration_func(config):
                 yield enum_changed_config
+
 
     def toggle_all_test_type(self, config: ValkyrieConfig2889, status: bool) -> None:
         for each_type in self.test_types:
@@ -237,16 +249,20 @@ class ValkyrieConfigMaker2889(ValkyrieConfigMakerBase[ValkyrieConfig2889]):
         config.test_options.test_type_option_map.errored_frames_filtering.oversize_test_enabled ^= False
         yield config
 
-
     def generate_testing_config(self) -> GeneratorValkyrie2889:
+
         for base_config in self.get_available_base_config_models():
-            yield base_config # test each config without change anything
-            yield from self.toggle_boolean_field(base_config.copy(deep=True))
-            yield from self.test_each_test_type_separately(base_config.copy(deep=True))
+            # new_config = base_config.copy(deep=True) # test each config without change anything
+            # yield new_config
+            # yield from self.toggle_boolean_field(base_config.copy(deep=True))
+            # yield from self.test_each_test_type_separately(base_config.copy(deep=True))
             yield from self.iter_change_enums(base_config.copy(deep=True))
             yield from self.test_address_learning(base_config.copy(deep=True))
 
 
+def save_xoa_config(config: str) -> None:
+    with open(SAVED_CONFIG_PATH / f'{uuid.uuid4().hex}.json', 'w') as fp:
+        fp.write(config)
 
 async def do_test():
     ctrl = await controller.MainController()
@@ -271,9 +287,20 @@ async def do_test():
 
     testing_config_maker = ValkyrieConfigMaker2889()
     testing_config_maker.add_base_config('test_config/6_port_throughput.v2889')
-    #testing_config_maker.add_base_config('test.v2889')
+    is_exists = {}
+    overlap = 0
+    executed_time = []
     for valkyrie_config in testing_config_maker.generate_testing_config():
-        xoa_config = converter(TestSuiteType.RFC2889, valkyrie_config.json())
+        start = int(time.time())
+        xoa_config = Converter2889Testing(valkyrie_config).gen()
+        xoa_config = json.dumps(xoa_config, indent=2, cls=ComplexEncoder, sort_keys=True)
+        md5 = hashlib.md5(xoa_config.encode('utf-8')).hexdigest()
+        if md5 in is_exists:
+            overlap += 1
+            continue
+        is_exists[md5] = True
+        save_xoa_config(xoa_config)
+        continue
         xoa_config = json.loads(xoa_config)
         execution_id = ctrl.start_test_suite('RFC-2889', xoa_config)
         async for msg in ctrl.listen_changes(execution_id, _filter={types.EMsgType.STATISTICS}):
@@ -283,7 +310,10 @@ async def do_test():
             if error_id:
                 with open(TEST_ERROR_PATH / str(error_id) / 'config.json', 'w') as fp:
                     json.dump(xoa_config, fp, indent=2)
-
+        end = int(time.time())
+        executed_time.append(end-start)
+    print(overlap)
+    print(executed_time)
 
 if __name__ == "__main__":
     asyncio.run(do_test())
