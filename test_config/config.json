@@ -1,0 +1,5 @@
+{
+    "pairs": ["test_config/pair0.v2544","test_config/pair1.v2544","test_config/pair2.v2544"],
+    "blocks": ["test_config/block0.v2544","test_config/block1.v2544","test_config/block2.v2544"],
+    "mesh": ["test_config/mesh0.v2544","test_config/mesh1.v2544","test_config/mesh2.v2544"]
+}
