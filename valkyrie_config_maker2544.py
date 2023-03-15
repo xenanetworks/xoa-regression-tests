@@ -5,15 +5,11 @@ from valkyrie_config_maker import ValkyrieConfigMakerBase
 from xoa_converter.converters.rfc2544 import enums
 from plugins.plugin2544.utils import constants as const
 
-# class ValkyrieConfig2544(LegacyModel2544):
-#     class Config:
-#         allow_population_by_field_name = True
 
 T = TypeVar("T", ValkyrieConfig2544, ValkyrieConfig2544)
 
 
 GeneratorValkyrie2544 = Generator[ValkyrieConfig2544, None, None]
-
 
 
 class ValkyrieConfigMaker2544(ValkyrieConfigMakerBase[ValkyrieConfig2544]):
@@ -24,31 +20,31 @@ class ValkyrieConfigMaker2544(ValkyrieConfigMakerBase[ValkyrieConfig2544]):
     def e_LegacyFecMode(
         self, valkyrie_model: ValkyrieConfig2544
     ) -> GeneratorValkyrie2544:
-        for value in self.iterate_enum_values(enums.LegacyFecMode):
+        for e in self.iterate_enum(enums.LegacyFecMode):
             for port in valkyrie_model.port_handler.entity_list:
-                port.fec_mode = value
+                port.fec_mode = e
             yield valkyrie_model
 
     def e_LegacyPortRateCapUnit(
         self, valkyrie_model: ValkyrieConfig2544
     ) -> GeneratorValkyrie2544:
-        for value in self.iterate_enum_values(enums.LegacyPortRateCapUnit):
+        for e in self.iterate_enum(enums.LegacyPortRateCapUnit):
             for port in valkyrie_model.port_handler.entity_list:
                 port.port_rate_cap_profile = (
                     enums.LegacyPortRateCapProfile.CUSTOM_RATE_CAP
                 )
-                port.port_rate_cap_unit = value
+                port.port_rate_cap_unit = e
                 port.enable_port_rate_cap = True
             yield valkyrie_model
 
     def e_PortSpeed(self, valkyrie_model: ValkyrieConfig2544) -> GeneratorValkyrie2544:
-        for value in self.iterate_enum_values(const.PortSpeedStr):
+        for value in self.iterate_enum(const.PortSpeedStr):
             for port in valkyrie_model.port_handler.entity_list:
                 port.port_speed = value.value
             yield valkyrie_model
 
     def e_BRRMode(self, valkyrie_model: ValkyrieConfig2544) -> GeneratorValkyrie2544:
-        for value in self.iterate_enum_values(const.BRRModeStr):
+        for value in self.iterate_enum(const.BRRModeStr):
             for port in valkyrie_model.port_handler.entity_list:
                 port.brr_mode = value.value
             yield valkyrie_model
@@ -56,9 +52,9 @@ class ValkyrieConfigMaker2544(ValkyrieConfigMakerBase[ValkyrieConfig2544]):
     def e_MdiMdixMode(
         self, valkyrie_model: ValkyrieConfig2544
     ) -> GeneratorValkyrie2544:
-        for value in self.iterate_enum_values(const.MdiMdixMode):
+        for e in self.iterate_enum(const.MdiMdixMode):
             for port in valkyrie_model.port_handler.entity_list:
-                port.mdi_mdix_mode = value.value
+                port.mdi_mdix_mode = e.value
             yield valkyrie_model
 
     def e_AutoNegotiation(
@@ -78,16 +74,16 @@ class ValkyrieConfigMaker2544(ValkyrieConfigMakerBase[ValkyrieConfig2544]):
     def e_LegacyTrafficDirection(
         self, valkyrie_model: ValkyrieConfig2544
     ) -> GeneratorValkyrie2544:
-        for value in self.iterate_enum_values(enums.LegacyTrafficDirection):
-            valkyrie_model.test_options.topology_config.direction = value
+        for e in self.iterate_enum(enums.LegacyTrafficDirection):
+            valkyrie_model.test_options.topology_config.direction = e
             yield valkyrie_model
 
     # 2. Frame Sizes
     def e_LegacyPacketSizeType(
         self, valkyrie_model: ValkyrieConfig2544
     ) -> GeneratorValkyrie2544:
-        for value in self.iterate_enum_values(enums.LegacyPacketSizeType):
-            valkyrie_model.test_options.packet_sizes.packet_size_type = value
+        for e in self.iterate_enum(enums.LegacyPacketSizeType):
+            valkyrie_model.test_options.packet_sizes.packet_size_type = e
             yield valkyrie_model
 
     # 3. Frame Test Payload
@@ -103,11 +99,8 @@ class ValkyrieConfigMaker2544(ValkyrieConfigMakerBase[ValkyrieConfig2544]):
     def e_PayloadType(
         self, valkyrie_model: ValkyrieConfig2544
     ) -> GeneratorValkyrie2544:
-        init = valkyrie_model.test_options.payload_definition.payload_type
-        for value in self.iterate_enum_values(const.PayloadTypeStr):
-            if init == value.value:
-                continue
-            valkyrie_model.test_options.payload_definition.payload_type = value.value
+        for e in self.iterate_enum(const.PayloadTypeStr):
+            valkyrie_model.test_options.payload_definition.payload_type = e.value
             yield valkyrie_model
 
     # TestConfiguration - Test Excetion Control
@@ -115,25 +108,22 @@ class ValkyrieConfigMaker2544(ValkyrieConfigMakerBase[ValkyrieConfig2544]):
     def e_LegacyFlowCreationType(
         self, valkyrie_model: ValkyrieConfig2544
     ) -> GeneratorValkyrie2544:
-        init = valkyrie_model.test_options.flow_creation_options.flow_creation_type
-        for value in self.iterate_enum_values(enums.LegacyFlowCreationType):
-            if init == value:
-                continue
-            valkyrie_model.test_options.flow_creation_options.flow_creation_type = value
+        for e in self.iterate_enum(enums.LegacyFlowCreationType):
+            valkyrie_model.test_options.flow_creation_options.flow_creation_type = e
+
             yield valkyrie_model
 
     def e_LegacyTidAllocationScope(
         self, valkyrie_model: ValkyrieConfig2544
     ) -> GeneratorValkyrie2544:
-        init = valkyrie_model.tid_allocation_scope
         t = valkyrie_model.test_options.flow_creation_options.flow_creation_type
-        for value in self.iterate_enum_values(enums.LegacyTidAllocationScope):
-            if t == enums.LegacyFlowCreationType.STREAM_BASED and init == value:
+        for e in self.iterate_enum(enums.LegacyTidAllocationScope):
+            if t == enums.LegacyFlowCreationType.STREAM_BASED:
                 continue
             valkyrie_model.test_options.flow_creation_options.flow_creation_type = (
                 enums.LegacyFlowCreationType.STREAM_BASED
             )
-            valkyrie_model.tid_allocation_scope = value
+            valkyrie_model.tid_allocation_scope = e
             yield valkyrie_model
 
     # 2. Port Scheduling
@@ -155,22 +145,16 @@ class ValkyrieConfigMaker2544(ValkyrieConfigMakerBase[ValkyrieConfig2544]):
     def e_LegacyOuterLoopMode(
         self, valkyrie_model: ValkyrieConfig2544
     ) -> GeneratorValkyrie2544:
-        init = valkyrie_model.test_options.outer_loop_mode
-        for value in self.iterate_enum_values(enums.LegacyOuterLoopMode):
-            if init == value:
-                continue
-            valkyrie_model.test_options.outer_loop_mode = value
+        for e in self.iterate_enum(enums.LegacyOuterLoopMode):
+            valkyrie_model.test_options.outer_loop_mode = e
             yield valkyrie_model
 
     # 4. MAC Learning Options
     def e_LegacyMACLearningMode(
         self, valkyrie_model: ValkyrieConfig2544
     ) -> GeneratorValkyrie2544:
-        init = valkyrie_model.test_options.learning_options.mac_learning_mode
-        for value in self.iterate_enum_values(enums.LegacyMACLearningMode):
-            if init == value:
-                continue
-            valkyrie_model.test_options.learning_options.mac_learning_mode = value
+        for e in self.iterate_enum(enums.LegacyMACLearningMode):
+            valkyrie_model.test_options.learning_options.mac_learning_mode = e
             yield valkyrie_model
 
     def e_TogglePortSync(
@@ -224,9 +208,9 @@ class ValkyrieConfigMaker2544(ValkyrieConfigMakerBase[ValkyrieConfig2544]):
         valkyrie_model.test_options.test_type_option_map.latency.enabled = False
         valkyrie_model.test_options.test_type_option_map.loss.enabled = False
         valkyrie_model.test_options.test_type_option_map.back2_back.enabled = False
-        for value in self.iterate_enum_values(enums.LegacySearchType):
+        for e in self.iterate_enum(enums.LegacySearchType):
             valkyrie_model.test_options.test_type_option_map.throughput.rate_iteration_options.search_type = (
-                value
+                e
             )
             yield valkyrie_model
 
@@ -237,15 +221,9 @@ class ValkyrieConfigMaker2544(ValkyrieConfigMakerBase[ValkyrieConfig2544]):
         valkyrie_model.test_options.test_type_option_map.latency.enabled = False
         valkyrie_model.test_options.test_type_option_map.loss.enabled = False
         valkyrie_model.test_options.test_type_option_map.back2_back.enabled = False
-        init = (
-            valkyrie_model.test_options.test_type_option_map.throughput.rate_iteration_options.result_scope
-        )
-        for value in self.iterate_enum_values(enums.LegacyRateResultScopeType):
-            if init == value:
-                continue
-            valkyrie_model.test_options.test_type_option_map.throughput.rate_iteration_options.result_scope = (
-                value
-            )
+        for e in self.iterate_enum(enums.LegacyRateResultScopeType):
+            valkyrie_model.test_options.test_type_option_map.throughput.rate_iteration_options.result_scope =                 e
+            
             yield valkyrie_model
 
     # Pass Criteria
@@ -270,8 +248,10 @@ class ValkyrieConfigMaker2544(ValkyrieConfigMakerBase[ValkyrieConfig2544]):
         valkyrie_model.test_options.test_type_option_map.latency.enabled = True
         valkyrie_model.test_options.test_type_option_map.loss.enabled = False
         valkyrie_model.test_options.test_type_option_map.back2_back.enabled = False
-        for value in self.iterate_enum_values(const.LatencyModeStr):
-            valkyrie_model.test_options.test_type_option_map.latency.latency_mode = value.value
+        for e in self.iterate_enum(const.LatencyModeStr):
+            valkyrie_model.test_options.test_type_option_map.latency.latency_mode = (
+                e.value
+            )
             yield valkyrie_model
 
     def e_RelativeToThroughput(
@@ -354,12 +334,12 @@ class ValkyrieConfigMaker2544(ValkyrieConfigMakerBase[ValkyrieConfig2544]):
             self.e_GapMonitorEnable,
         ):
             for enum_changed_config in iteration_func(config.copy(deep=True)):
-                print(enum_changed_config.port_handler.entity_list)
                 yield enum_changed_config
 
     def generate_testing_config(self) -> GeneratorValkyrie2544:
         for base_config in self.get_available_base_config_models():
-            print(1)
             yield base_config.copy(deep=True)  # test all config without change anything
-            for enum_changed_config in self.iter_change_enums(base_config.copy(deep=True)):
+            for enum_changed_config in self.iter_change_enums(
+                base_config.copy(deep=True)
+            ):
                 yield enum_changed_config

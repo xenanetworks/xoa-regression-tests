@@ -2,7 +2,7 @@ import random
 from abc import ABC, abstractmethod
 from enum import Enum
 from pathlib import Path
-from typing import Generator, Generic, List, Type, TypeVar
+from typing import Generator, Generic, List, Type, TypeVar, Tuple
 
 from xoa_converter.converters.rfc2544.model import LegacyModel2544 as ValkyrieConfig2544
 from xoa_converter.converters.rfc2889.model import ValkyrieConfiguration2889 as ValkyrieConfig2889
@@ -32,3 +32,6 @@ class ValkyrieConfigMakerBase(Generic[T], ABC):
 
     def random_float(self, min: float, max: float, ndigits: int = 2) -> float:
         return round(random.uniform(min, max), ndigits=ndigits)
+    
+    def iterate_enum(self, config_enum: Type[Enum]) -> Generator[Enum, None, None]:
+        return (i for i in config_enum)
