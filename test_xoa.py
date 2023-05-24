@@ -20,7 +20,7 @@ from xoa_converter.types import TestSuiteType
 
 
 TS_GIT_REPO = 'https://github.com/xenanetworks/open-automation-test-suites'
-TS_GIT_BRANCH = 'fix-use-enum-name'
+TS_GIT_BRANCH = os.getenv('TEST_SUITES_BRANCH') or 'dev'
 TS_WILL_BE_TEST = (
     'plugin2544',
     'plugin2889',
