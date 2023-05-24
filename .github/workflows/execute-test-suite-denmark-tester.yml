@@ -41,7 +41,7 @@ jobs:
       - name: Replace deps as current repo and branch
         working-directory: ./xoa-regression-tests
         run: |
-          python actions_override_deps.py --repo ${{ github.event.repository.name }} --branch ${{ github.head_ref || github.ref_name }}
+          python actions_override_deps.py --event ${{ github.event_name }} --repo ${{ github.event.repository.name }} --branch ${{ github.head_ref || github.ref_name }} 
           cat git-requires.txt
 
       - name: Run tox
