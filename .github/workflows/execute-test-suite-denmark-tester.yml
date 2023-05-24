@@ -1,10 +1,10 @@
-name: Check if test suite workable
+name: Check if test suites workable
 on:
   workflow_call:
 
 jobs:
   pre_job:
-    name: "Check if already executed"
+    name: "Skip test if already executed"
     runs-on: ubuntu-latest
     outputs:
       should_skip: ${{ steps.skip_check.outputs.should_skip }}
@@ -41,12 +41,12 @@ jobs:
       - name: Replace deps as current repo and branch
         working-directory: ./xoa-regression-tests
         run: |
-          python actions_override_deps.py --event ${{ github.event_name }} --repo ${{ github.event.repository.name }} --branch ${{ github.head_ref || github.ref_name }} 
+          python actions_override_deps.py --event_name ${{ github.event_name }} --event_repo ${{ github.event.repository.name }} --event_branch ${{ github.head_ref || github.ref_name }} --core_branch ${{ github.event.inputs.core_branch || 'dev' }} --converter_branch ${{ github.event.inputs.converter_branch || 'dev' }} --driver_branch ${{ github.event.inputs.driver_branch || 'dev' }} 
           cat git-requires.txt
 
       - name: Run tox
         working-directory: ./xoa-regression-tests
-        run: tox -e git-demo-tester -r
+        run: TEST_SUITES_BRANCH=${{ github.event.inputs.test_suites_branch || 'dev' }} tox -e git-demo-tester -r
 
 concurrency:
   # group: ${{ github.head_ref || github.ref_name }}
