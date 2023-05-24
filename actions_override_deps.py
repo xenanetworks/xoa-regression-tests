@@ -38,7 +38,7 @@ def replace_single_repo() -> List[str]:
     return lines
 
 def main() -> None:
-    if args.event_name == 'pull_request':
+    if args.event_name == 'push':
         lines = replace_single_repo()
     else: # manual testing
         lines = replace_all_repo()
