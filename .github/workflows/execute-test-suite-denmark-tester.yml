@@ -29,7 +29,8 @@ jobs:
           repository: xenanetworks/xoa-regression-tests
           path: ./xoa-regression-tests
           submodules: recursive
-
+          ref: 'fch-actions'
+  
       - name: Setup python
         uses: actions/setup-python@v4
         with:
