@@ -60,7 +60,7 @@ def get_valkyire_config_path(_type: TestSuiteType) -> str:
     file_extension = {
         TestSuiteType.RFC2544: 'v2544',
         TestSuiteType.RFC2889: 'v2889',
-        TestSuiteType.RFC2889: 'v3918',
+        TestSuiteType.RFC3918: 'v3918',
     }[_type]
     return f"{tester}.{file_extension}"
 
