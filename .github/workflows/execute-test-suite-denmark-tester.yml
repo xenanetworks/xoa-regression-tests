@@ -4,7 +4,7 @@ on:
 
 jobs:
   pre_job:
-    name: "Skip test if already executed"
+    name: "Skip execute test if already passed"
     runs-on: ubuntu-latest
     outputs:
       should_skip: ${{ steps.skip_check.outputs.should_skip }}
