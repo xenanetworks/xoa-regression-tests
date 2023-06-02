@@ -1,16 +1,18 @@
+import asyncio
 import os
 import json
 import shutil
 import pytest
 import git
+import pytest_asyncio
 from typing import Tuple
 from pathlib import Path
+from async_timeout import timeout
+
 from xoa_core import (
     controller,
     types,
 )
-from async_timeout import timeout
-
 from xoa_converter.entry import converter
 from xoa_converter.types import TestSuiteType
 
@@ -26,7 +28,6 @@ WILL_TEST_TS_FOLDER_TAIL = (
     '2889',
     '3918',
 )
-
 
 TESTER_CHINA = (
     types.Credentials(
@@ -64,13 +65,6 @@ def get_valkyire_config_path(_type: TestSuiteType) -> str:
     }[_type]
     return f"{tester}.{file_extension}"
 
-
-TS_FOR_TESTING = (
-    TestSuiteType.RFC2544,
-    TestSuiteType.RFC2889,
-    TestSuiteType.RFC3918,
-)
-
 def copy_ts_folder_content(path_ts_git: Path, path_plugins: Path):
     for ts in WILL_TEST_TS_FOLDER_TAIL:
         shutil.move(str(path_ts_git / f"plugin{ts}"), str(path_plugins))
@@ -99,31 +93,47 @@ def remove_core_store_file():
     if os.path.isfile('store'):
         os.remove('store')
 
-@pytest.mark.order(1)
-@pytest.mark.asyncio
 # driver v1 incompatible with older version xena server
 # dont know how to catch nested coroutine exception so adding timeout here
 # https://github.com/pytest-dev/pytest-asyncio/issues/32
-@with_timeout(10)
-async def test_add_tester():
+@pytest.mark.order(1)
+@pytest.mark.asyncio
+@with_timeout(15)
+async def test_fast_fail():
     xoa_controller = await controller.MainController()
     for tester in get_testers():
         await xoa_controller.add_tester(tester)
 
+@pytest.fixture(scope="session")
+def event_loop():
+    return asyncio.get_event_loop()
+
+@pytest_asyncio.fixture(scope="session")
+async def xoa_controller(plugin_folder):
+    ctrl = await controller.MainController()
+    ctrl.register_lib( str(plugin_folder) )
+    for tester in get_testers():
+        await ctrl.add_tester(tester)
+    return ctrl
+
+async def start_ts(xoa_controller, test_suite):
+    info = xoa_controller.get_test_suite_info(test_suite.value)
+    assert info
+    with open(get_valkyire_config_path(test_suite), "r") as f:
+        new_data = converter(test_suite, f.read())
+        new_config = json.loads(new_data)
+        execution_id = xoa_controller.start_test_suite(test_suite.value, new_config)
+        async for msg in xoa_controller.listen_changes(execution_id, _filter={types.EMsgType.STATISTICS}):
+            assert msg
 
 @pytest.mark.asyncio
-async def test_plugins(plugin_folder):
-    xoa_controller = await controller.MainController()
-    xoa_controller.register_lib( str(plugin_folder) )
-    for tester in get_testers():
-        await xoa_controller.add_tester(tester)
+async def test_2544(xoa_controller):
+    await start_ts(xoa_controller, TestSuiteType.RFC2544)
 
-    for test_suite in TS_FOR_TESTING:
-        info = xoa_controller.get_test_suite_info(test_suite.value)
-        assert info
-        with open(get_valkyire_config_path(test_suite), "r") as f:
-            new_data = converter(test_suite, f.read())
-            new_config = json.loads(new_data)
-            execution_id = xoa_controller.start_test_suite(test_suite.value, new_config)
-            async for msg in xoa_controller.listen_changes(execution_id, _filter={types.EMsgType.STATISTICS}):
-                assert msg
+@pytest.mark.asyncio
+async def test_2889(xoa_controller):
+    await start_ts(xoa_controller, TestSuiteType.RFC2889)
+
+@pytest.mark.asyncio
+async def test_3918(xoa_controller):
+    await start_ts(xoa_controller, TestSuiteType.RFC3918)
